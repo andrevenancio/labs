@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title><%= htmlWebpackPlugin.options.title %></title>
+        <meta charset="UTF-8">
+        <style>
+            html, body {
+                margin: 0;
+                background-color: #000;
+                color: #fff;
+                font-family: sans-serif;
+                font-size: 14px;
+                -moz-osx-font-smoothing: grayscale;
+                -webkit-font-smoothing: antialiased;
+            }
+
+            canvas {
+                display: block;
+            }
+
+            h1, p, nav {
+                padding: 20px 20px 0 20px;
+                margin: 0;
+            }
+
+            sup {
+                font-size: x-small;
+                padding-left: 2px;
+                color: #f00;
+            }
+
+            a {
+                display: block;
+                color: #999;
+                text-decoration: none;
+                line-height: 20px;
+            }
+
+            a:hover {
+                color: #fff;
+            }
+
+            a.back,
+            a.source {
+                position: fixed;
+                background-color: rgba(255, 255, 255, 0.05);
+                padding: 3px 6px;
+                border-radius: 4px;
+                font-family: monospace;
+                font-size: 12px;
+            }
+
+            a.back:hover,
+            a.source:hover {
+                background-color: rgba(255, 255, 255, 0.1);
+            }
+
+            a.back {
+                top: 20px;
+                left: 20px;
+            }
+
+            a.source {
+                bottom: 20px;
+                right: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <% if(htmlWebpackPlugin.options.paths){ %>
+        <h1><%= htmlWebpackPlugin.options.title %></h1>
+        <nav>
+            <% Object.keys(htmlWebpackPlugin.options.paths).forEach(function(prop) { %>
+                <a href="./<%- htmlWebpackPlugin.options.paths[prop] %>"><%- prop %></a>
+            <% }); %>
+        </nav>
+        <% } else { %>
+        <a href="./" class="back">back</a>
+        <a href="https://github.com/andrevenancio/labs/blob/master/src/<%= htmlWebpackPlugin.options.title %>/index.js" class="source">source</a>
+        <script type="text/javascript" src='js/<%= htmlWebpackPlugin.options.title %>.js'></script>
+        <% } %>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-46159137-10"></script>
+        <script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'UA-46159137-10');</script>
+    </body>
+</html>
