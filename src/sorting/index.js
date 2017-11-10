@@ -1,5 +1,6 @@
-import { vec2 } from 'gl-matrix';
-import { Renderer, Scene, cameras, Model, chunks } from '../../lowww-core';
+import { gui } from 'dat-gui';
+import { vec2, vec3 } from 'gl-matrix';
+import { Renderer, Scene, cameras, Model, Performance, chunks } from '../../lowww-core';
 import { Box } from '../../lowww-geometries';
 
 const {
@@ -7,11 +8,6 @@ const {
     NOISE,
     FOG,
 } = chunks;
-
-
-const mod = (m, n) => {
-    return ((m % n) + n) % n;
-};
 
 class Main {
     constructor() {
@@ -28,29 +24,42 @@ class Main {
         this.renderer = new Renderer();
         document.body.appendChild(this.renderer.domElement);
 
+        this.renderer.domElement.addEventListener('mousemove', this.move, false);
+
         this.scene = new Scene();
-        this.scene.fog.start = 1000;
-        this.scene.fog.end = 1800;
+        this.scene.fog.start = 0;
+        this.scene.fog.end = 2000;
         this.scene.fog.enable = true;
 
         this.camera = new cameras.Perspective({ near: 0.01, far: 10000 });
-        this.camera.position.set(0, 400, 1200);
+        this.camera.position.set(0, 400, 1300);
+
+        this.performance = new Performance();
+        document.body.appendChild(this.performance.domElement);
     }
 
     debug() {
         this.settings = {
-            width: 80,
-            height: 150,
-            depth: 80,
-            row: 44,
-            col: 20,
-            speed: 5,
-            seed: 700,
-            scale: 110,
+            size: 80,
+            row: 24,
+            col: 18,
+            seed: 600,
+            amplitude: 170,
+            speedX: 0,
+            speedY: 0,
+            speedZ: -1,
         };
 
         this.mouse = vec2.create();
-        this.offset = vec2.create();
+        this.eased = vec3.create();
+
+        this.gui = new gui.GUI();
+        this.gui.add(this.settings, 'seed', 0.1, 1000).onChange(() => {
+            this.model.uniforms.u_seed.value = this.settings.seed;
+        });
+        this.gui.add(this.settings, 'amplitude', -200, 200).onChange(() => {
+            this.model.uniforms.u_scale.value = this.settings.amplitude;
+        });
     }
 
     init() {
@@ -65,13 +74,16 @@ class Main {
 
             uniform float u_seed;
             uniform float u_scale;
-            uniform float u_speed;
+            uniform vec3 u_speed;
+            uniform vec3 u_mouse_offset;
 
             out vec3 v_color;
 
             float noise(vec3 p) {
                 float n = 0.0;
                 n += 1.00 * (cnoise(p * 1.0));
+                //n += 0.50 * (cnoise(p * 2.0));
+                //n += 0.25 * (cnoise(p * 4.0));
                 return n;
             }
 
@@ -81,10 +93,11 @@ class Main {
             }
 
             void main() {
-                float n =noise(vec3(a_offset / u_seed) + vec3(u_speed / 100. * iGlobalTime));
-                vec3 position = a_position + a_offset + vec3(0.0, n * u_scale, 0.0);
-                gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1.0);
+                vec3 mouseOff = vec3(u_mouse_offset.x / 2., 0.0, 0.0);
+                float n = noise(vec3(a_offset / u_seed) + vec3(u_speed * iGlobalTime) + mouseOff);
 
+                vec3 position = a_position + a_offset + vec3(0.0, n * u_scale, 0.0) + u_mouse_offset;
+                gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1.0);
                 float v = 200.0;
                 v_color = vec3( map(position.y, -v, v, 0., 1.) );
             }
@@ -109,13 +122,26 @@ class Main {
 
         const instances = this.settings.row * this.settings.col;
         const offsets = [];
-        const { width, height, depth } = this.settings;
 
+        let initialX = (this.settings.row * this.settings.size) / -2;
+        initialX += this.settings.size / 2;
+
+        let initialZ = (this.settings.col * this.settings.size) / -2;
+        initialZ += this.settings.size / 2;
+
+        const margin = 0;
         for (let i = 0; i < instances; i++) {
-            offsets.push(0, 0, 0);
+            const x = initialX + (Math.floor(i / this.settings.col) * (this.settings.size + margin));
+            const y = 0;
+            const z = initialZ + ((i % this.settings.col) * (this.settings.size + margin));
+            offsets.push(x, y, z);
         }
 
-        const geometry = new Box(width / 2, height / 2, depth / 2);
+        // geometry
+        const { size } = this.settings;
+        const hsize = size / 2;
+
+        const geometry = new Box(hsize, hsize * 4, hsize);
         this.model = new Model();
         this.model.setAttribute('a_position', 'vec3', new Float32Array(geometry.positions));
         this.model.setIndex(new Uint16Array(geometry.indices));
@@ -123,59 +149,34 @@ class Main {
         this.model.setInstanceAttribute('a_offset', 'vec3', new Float32Array(offsets), true);
         this.model.setInstanceCount(instances);
         this.model.setUniform('u_seed', 'float', this.settings.seed);
-        this.model.setUniform('u_scale', 'float', this.settings.scale);
-        this.model.setUniform('u_speed', 'float', this.settings.speed);
+        this.model.setUniform('u_scale', 'float', this.settings.amplitude);
+        this.model.setUniform('u_speed', 'vec3', [this.settings.speedX, this.settings.speedY, this.settings.speedZ]);
+        this.model.setUniform('u_mouse_offset', 'vec3', this.eased);
         this.model.setShader(vertex, fragment);
         this.scene.add(this.model);
-
-        this.renderer.domElement.addEventListener('mousemove', this.move, false);
     }
 
     resize = () => {
         this.renderer.setSize(global.innerWidth, global.innerHeight);
         this.renderer.setRatio(global.devicePixelRatio);
-
-        this.initialX = (this.settings.row * this.settings.width) / -2;
-        this.initialX += this.settings.width / 2;
-
-        this.initialZ = (this.settings.col * this.settings.depth) / -2;
-        this.initialZ += this.settings.depth / 2;
-
-        this.maxWidth = this.settings.row * this.settings.width;
-        this.maxDepth = this.settings.col * this.settings.depth;
     }
 
     move = (e) => {
         this.mouse[0] = ((e.clientX / global.innerWidth) * 2) - 1;
-        this.mouse[1] = -((e.clientY / global.innerHeight) * 2) + 1;
-    }
+        this.mouse[1] = -(e.clientY / global.innerHeight);
 
-    updateOffsets = () => {
-        this.offset[0] -= this.mouse[0] * 10;
-        this.offset[1] += this.mouse[1] * 10;
-
-        this.model.dirty.attributes = true;
-
-        this.offset[1] += this.settings.speed;
-        let id = 0;
-        let x;
-        let z;
-        const p = this.model.attributes.a_offset.value;
-        for (let i = 0; i < p.length; i += 3) {
-            x = Math.floor(id / this.settings.col) * this.settings.width;
-            z = (id % this.settings.col) * this.settings.depth;
-
-            p[i + 0] = this.initialX + mod(x + this.offset[0], this.maxWidth);
-            p[i + 1] = 0;
-            p[i + 2] = this.initialZ + mod(z + this.offset[1], this.maxDepth);
-
-            id++;
-        }
+        const [x, z] = this.mouse;
+        this.model.uniforms.u_mouse_offset.value[0] = x;
+        this.model.uniforms.u_mouse_offset.value[2] = z;
+        // console.log(this.model.uniforms.u_speed.value[0]);
     }
 
     update = () => {
-        this.updateOffsets();
+        // this.eased[0] -= (this.eased[0] + this.mouse[0]) / 20;
+        // this.eased[2] -= (this.eased[2] + this.mouse[1]) / 20;
+
         this.renderer.render(this.scene, this.camera);
+        this.performance.update(this.renderer);
 
         requestAnimationFrame(this.update);
     }
