@@ -1,5 +1,6 @@
 const Clean = require('clean-webpack-plugin');
 const Uglify = require('uglifyjs-webpack-plugin');
+
 const {
     PATH_DIST,
 } = require('./webpack.config');

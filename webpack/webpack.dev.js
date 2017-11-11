@@ -1,6 +1,7 @@
 const path = require('path');
 const parsing = require('./parsing');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const {
     NAME,
@@ -44,6 +45,11 @@ module.exports = {
             version: JSON.parse(CORE_VERSION),
             paths: parsing.getPaths(),
         }),
+        new CopyWebpackPlugin([{
+            context: path.join(PATH_SOURCE),
+            from: '**/*.jpg',
+            to: path.join('img', '[folder].jpg'),
+        }]),
         ...parsing.getPlugins(),
     ],
 
