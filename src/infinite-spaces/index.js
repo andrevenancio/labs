@@ -42,7 +42,7 @@ class Main {
             width: 80,
             height: 150,
             depth: 80,
-            row: 44,
+            row: 24,
             col: 20,
             speed: 5,
             seed: 700,
@@ -81,7 +81,7 @@ class Main {
             }
 
             void main() {
-                float n =noise(vec3(a_offset / u_seed) + vec3(u_speed / 100. * iGlobalTime));
+                float n = noise(vec3(a_offset / u_seed) + vec3(u_speed / 100.0 * iGlobalTime));
                 vec3 position = a_position + a_offset + vec3(0.0, n * u_scale, 0.0);
                 gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1.0);
 
