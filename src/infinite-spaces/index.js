@@ -42,7 +42,7 @@ class Main {
             width: 80,
             height: 150,
             depth: 80,
-            row: 24,
+            row: 34,
             col: 20,
             speed: 5,
             seed: 700,
