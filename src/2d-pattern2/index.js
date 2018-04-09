@@ -31,7 +31,7 @@ class Main {
         };
 
         const gui = new dat.GUI();
-        // gui.close();
+        gui.close();
 
         gui.add(this.settings, 'frequency', 0, 100).onChange(() => {
             this.model.uniforms.u_frequency.value = this.settings.frequency;
