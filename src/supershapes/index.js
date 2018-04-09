@@ -1,5 +1,5 @@
 import dat from 'dat-gui';
-import { Renderer, Scene, cameras, Model, Performance, chunks } from '../../lowww-core';
+import { Renderer, Scene, cameras, Model, chunks } from '../../lowww-core';
 import { Icosahedron } from '../../lowww-geometries';
 import { Orbit } from '../../lowww-controls';
 
@@ -26,65 +26,71 @@ class Main {
         this.camera.position.set(0, 100, 300);
 
         this.controls = new Orbit(this.camera, this.renderer.domElement);
-
-        this.performance = new Performance();
-        document.body.appendChild(this.performance.domElement);
     }
 
     init() {
         this.settings = {
-            n1_1: 0.20,
-            n2_1: 1.7,
-            n3_1: 1.7,
-            m_1: 7,
-            a_1: 1,
-            b_1: 1,
-            n1_2: 0.2,
-            n2_2: 1.7,
-            n3_2: 1.7,
-            m_2: 7,
-            a_2: 1,
-            b_2: 1,
+            a: {
+                n1: 0.20,
+                n2: 1.7,
+                n3: 1.7,
+                m: 7,
+                a: 1,
+                b: 1,
+            },
+            b: {
+                n1: 0.2,
+                n2: 1.7,
+                n3: 1.7,
+                m: 7,
+                a: 1,
+                b: 1,
+            },
         };
 
         const gui = new dat.GUI();
+        gui.close();
 
-        gui.add(this.settings, 'n1_1', 0, 2).onChange(() => {
-            this.model.uniforms.n1_1.value = this.settings.n1_1;
+        const a = gui.addFolder('a');
+        a.open();
+        a.add(this.settings.a, 'n1', 0, 2).onChange(() => {
+            this.model.uniforms.n1_1.value = this.settings.a.n1;
         });
-        gui.add(this.settings, 'n2_1', 0, 10).onChange(() => {
-            this.model.uniforms.n2_1.value = this.settings.n2_1;
+        a.add(this.settings.a, 'n2', 0, 10).onChange(() => {
+            this.model.uniforms.n2_1.value = this.settings.a.n2;
         });
-        gui.add(this.settings, 'n3_1', 0, 10).onChange(() => {
-            this.model.uniforms.n3_1.value = this.settings.n3_1;
+        a.add(this.settings.a, 'n3', 0, 10).onChange(() => {
+            this.model.uniforms.n3_1.value = this.settings.a.n3;
         });
-        gui.add(this.settings, 'm_1', 0, 10).onChange(() => {
-            this.model.uniforms.m_1.value = this.settings.m_1;
+        a.add(this.settings.a, 'm', 0, 10).onChange(() => {
+            this.model.uniforms.m_1.value = this.settings.a.m;
         });
-        gui.add(this.settings, 'a_1', 1, 2).onChange(() => {
-            this.model.uniforms.a_1.value = this.settings.a_1;
+        a.add(this.settings.a, 'a', 1, 2).onChange(() => {
+            this.model.uniforms.a_1.value = this.settings.a.a;
         });
-        gui.add(this.settings, 'b_1', 1, 2).onChange(() => {
-            this.model.uniforms.b_1.value = this.settings.b_1;
+        a.add(this.settings.a, 'b', 1, 2).onChange(() => {
+            this.model.uniforms.b_1.value = this.settings.a.b;
         });
 
-        gui.add(this.settings, 'n1_2', 0, 2).onChange(() => {
-            this.model.uniforms.n1_2.value = this.settings.n1_2;
+        const b = gui.addFolder('b');
+        b.open();
+        b.add(this.settings.b, 'n1', 0, 2).onChange(() => {
+            this.model.uniforms.n1_2.value = this.settings.b.n1;
         });
-        gui.add(this.settings, 'n2_2', 0, 10).onChange(() => {
-            this.model.uniforms.n2_2.value = this.settings.n2_2;
+        b.add(this.settings.b, 'n2', 0, 10).onChange(() => {
+            this.model.uniforms.n2_2.value = this.settings.b.n2;
         });
-        gui.add(this.settings, 'n3_2', 0, 10).onChange(() => {
-            this.model.uniforms.n3_2.value = this.settings.n3_2;
+        b.add(this.settings.b, 'n3', 0, 10).onChange(() => {
+            this.model.uniforms.n3_2.value = this.settings.b.n3;
         });
-        gui.add(this.settings, 'm_2', 0, 10).onChange(() => {
-            this.model.uniforms.m_2.value = this.settings.m_2;
+        b.add(this.settings.b, 'm', 0, 10).onChange(() => {
+            this.model.uniforms.m_2.value = this.settings.b.m;
         });
-        gui.add(this.settings, 'a_2', 1, 2).onChange(() => {
-            this.model.uniforms.a_2.value = this.settings.a_2;
+        b.add(this.settings.b, 'a', 1, 2).onChange(() => {
+            this.model.uniforms.a_2.value = this.settings.b.a;
         });
-        gui.add(this.settings, 'b_2', 1, 2).onChange(() => {
-            this.model.uniforms.b_2.value = this.settings.b_2;
+        b.add(this.settings.b, 'b', 1, 2).onChange(() => {
+            this.model.uniforms.b_2.value = this.settings.b.b;
         });
         const vertex = `#version 300 es
             in vec3 a_position;
@@ -136,7 +142,7 @@ class Main {
             }
 
             void main() {
-                vec4 position = projectionMatrix * viewMatrix * modelMatrix * vec4(superPositionForPosition(a_position), 1.0);;
+                vec4 position = projectionMatrix * viewMatrix * modelMatrix * vec4(superPositionForPosition(a_position), 1.0);
                 gl_Position = position;
                 fragVertexEc = position.xyz;
                 v_uv = a_uv;
@@ -177,18 +183,18 @@ class Main {
         this.model.setAttribute('a_position', 'vec3', new Float32Array(geometry.positions));
         this.model.setIndex(new Uint16Array(geometry.indices));
         this.model.setAttribute('a_normal', 'vec3', new Float32Array(geometry.normals));
-        this.model.setUniform('n1_1', 'float', this.settings.n1_1);
-        this.model.setUniform('n2_1', 'float', this.settings.n2_1);
-        this.model.setUniform('n3_1', 'float', this.settings.n3_1);
-        this.model.setUniform('m_1', 'float', this.settings.m_1);
-        this.model.setUniform('a_1', 'float', this.settings.a_1);
-        this.model.setUniform('b_1', 'float', this.settings.b_1);
-        this.model.setUniform('n1_2', 'float', this.settings.n1_2);
-        this.model.setUniform('n2_2', 'float', this.settings.n2_2);
-        this.model.setUniform('n3_2', 'float', this.settings.n3_2);
-        this.model.setUniform('m_2', 'float', this.settings.m_2);
-        this.model.setUniform('a_2', 'float', this.settings.a_2);
-        this.model.setUniform('b_2', 'float', this.settings.b_2);
+        this.model.setUniform('n1_1', 'float', this.settings.a.n1);
+        this.model.setUniform('n2_1', 'float', this.settings.a.n2);
+        this.model.setUniform('n3_1', 'float', this.settings.a.n3);
+        this.model.setUniform('m_1', 'float', this.settings.a.m);
+        this.model.setUniform('a_1', 'float', this.settings.a.a);
+        this.model.setUniform('b_1', 'float', this.settings.a.b);
+        this.model.setUniform('n1_2', 'float', this.settings.b.n1);
+        this.model.setUniform('n2_2', 'float', this.settings.b.n2);
+        this.model.setUniform('n3_2', 'float', this.settings.b.n3);
+        this.model.setUniform('m_2', 'float', this.settings.b.m);
+        this.model.setUniform('a_2', 'float', this.settings.b.a);
+        this.model.setUniform('b_2', 'float', this.settings.b.b);
         this.model.setShader(vertex, fragment);
         this.scene.add(this.model);
     }
@@ -203,7 +209,6 @@ class Main {
         this.model.rotation.y += 0.02;
         this.controls.update();
         this.renderer.render(this.scene, this.camera);
-        this.performance.update(this.renderer);
         requestAnimationFrame(this.update);
     }
 }
