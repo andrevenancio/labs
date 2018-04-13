@@ -2,16 +2,15 @@ import { vec2 } from 'gl-matrix';
 import { Renderer, Scene, cameras, Model, chunks } from '../../lowww-core';
 import { Box } from '../../lowww-geometries';
 
+import { getUrlParam } from '../_utils/url';
+import { mod } from '../_utils/math';
+
 const {
     UBO,
     NOISE,
     FOG,
 } = chunks;
 
-
-const mod = (m, n) => {
-    return ((m % n) + n) % n;
-};
 
 class Main {
     constructor() {
@@ -22,6 +21,10 @@ class Main {
         this.init();
         this.resize();
         this.update();
+
+        if (getUrlParam('controls') === 'false') {
+            document.body.className = 'hide';
+        }
     }
 
     setup() {

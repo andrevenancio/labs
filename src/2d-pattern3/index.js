@@ -1,5 +1,7 @@
 import QuadTree, { Rectangle, Point } from './quadtree';
 
+import { getUrlParam } from '../_utils/url';
+
 class Main {
     constructor() {
         global.addEventListener('resize', this.resize, false);
@@ -8,6 +10,10 @@ class Main {
         this.resize();
         this.init();
         this.update();
+
+        if (getUrlParam('controls') === 'false') {
+            document.body.className = 'hide';
+        }
     }
 
     setup() {

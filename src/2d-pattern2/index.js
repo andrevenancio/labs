@@ -2,6 +2,8 @@ import dat from 'dat-gui';
 import { Renderer, Scene, cameras, Model, chunks } from '../../lowww-core';
 import { Plane } from '../../lowww-geometries';
 
+import { getUrlParam } from '../_utils/url';
+
 const { UBO } = chunks;
 
 class Main {
@@ -12,6 +14,10 @@ class Main {
         this.init();
         this.resize();
         this.update();
+
+        if (getUrlParam('controls') === 'false') {
+            document.body.className = 'hide';
+        }
     }
 
     setup() {

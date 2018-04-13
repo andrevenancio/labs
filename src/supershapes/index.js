@@ -3,6 +3,8 @@ import { Renderer, Scene, cameras, Model, chunks } from '../../lowww-core';
 import { Icosahedron } from '../../lowww-geometries';
 import { Orbit } from '../../lowww-controls';
 
+import { getUrlParam } from '../_utils/url';
+
 const { UBO, FOG, LIGHT } = chunks;
 
 class Main {
@@ -13,6 +15,10 @@ class Main {
         this.init();
         this.resize();
         this.update();
+
+        if (getUrlParam('controls') === 'false') {
+            document.body.className = 'hide';
+        }
     }
 
     setup() {
