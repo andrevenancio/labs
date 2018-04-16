@@ -25,7 +25,7 @@ const api = {
                 return true;
             }
 
-            // only index.js quality as valid entry point
+            // only index.js qualifies as valid entry point
             return false;
         });
     },
@@ -64,6 +64,9 @@ const api = {
     getPaths: () => {
         return api.getList().reduce((entries, entry) => {
             const key = entry.replace(path.join(process.cwd(), PATH_SOURCE), '').split('/')[1].replace('.js', '');
+            if (key === '_lib') {
+                return entries;
+            }
             return Object.assign(entries, { [key]: `${key}.html` });
         }, {});
     },

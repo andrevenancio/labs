@@ -3,7 +3,7 @@ import Base from '../base';
 import { Renderer, Scene, cameras, Model, chunks } from '../../lowww-core';
 import { Box } from '../../lowww-geometries';
 
-import { mod } from '../_utils/math';
+import { mod } from '../_lib/utils/math';
 
 const {
     UBO,
@@ -120,7 +120,7 @@ class Main extends Base {
         this.renderer.domElement.addEventListener('mousemove', this.move, false);
     }
 
-    resize = () => {
+    resize() {
         this.renderer.setSize(global.innerWidth, global.innerHeight);
         this.renderer.setRatio(global.devicePixelRatio);
 
@@ -162,11 +162,9 @@ class Main extends Base {
         }
     }
 
-    update = () => {
+    update() {
         this.updateOffsets();
         this.renderer.render(this.scene, this.camera);
-
-        requestAnimationFrame(this.update);
     }
 }
 

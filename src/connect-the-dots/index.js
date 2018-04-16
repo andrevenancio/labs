@@ -1,10 +1,11 @@
 import Base from '../base';
-import QuadTree, { Rectangle, Point } from './quadtree';
-import { random } from '../_utils/math';
+import QuadTree, { Rectangle, Point } from '../_lib/quadtree';
+import { random } from '../_lib/utils/math';
 
-const VELOCITY = 4;
+const VELOCITY = 5;
 let quadtree;
 let point;
+
 class Main extends Base {
     setup() {
         this.canvas = document.createElement('canvas');

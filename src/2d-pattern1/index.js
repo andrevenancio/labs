@@ -110,15 +110,14 @@ class Main extends Base {
         this.scene.add(this.model);
     }
 
-    resize = () => {
+    resize() {
         this.model.uniforms.u_ratio.value = global.innerWidth / global.innerHeight;
         this.renderer.setSize(global.innerWidth, global.innerHeight);
         this.renderer.setRatio(global.devicePixelRatio);
     }
 
-    update = () => {
+    update() {
         this.renderer.render(this.scene, this.camera);
-        requestAnimationFrame(this.update);
     }
 }
 

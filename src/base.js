@@ -1,4 +1,4 @@
-import { getUrlParam } from './_utils/url';
+import { getUrlParam } from './_lib/utils/url';
 
 class Base {
     constructor() {

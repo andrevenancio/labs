@@ -194,17 +194,16 @@ class Main extends Base {
         this.scene.add(this.model);
     }
 
-    resize = () => {
+    resize() {
         this.renderer.setSize(global.innerWidth, global.innerHeight);
         this.renderer.setRatio(global.devicePixelRatio);
     }
 
-    update = () => {
+    update() {
         this.model.rotation.x += 0.01;
         this.model.rotation.y += 0.02;
         this.controls.update();
         this.renderer.render(this.scene, this.camera);
-        requestAnimationFrame(this.update);
     }
 }
 
