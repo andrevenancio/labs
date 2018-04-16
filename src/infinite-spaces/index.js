@@ -117,7 +117,13 @@ class Main extends Base {
         this.model.setShader(vertex, fragment);
         this.scene.add(this.model);
 
-        this.renderer.domElement.addEventListener('mousemove', this.move, false);
+        this.renderer.domElement.addEventListener('mousemove', (e) => {
+            this.move(e);
+        }, false);
+
+        this.renderer.domElement.addEventListener('touchmove', (e) => {
+            this.move(e.touches[0]);
+        }, false);
     }
 
     resize() {
@@ -134,7 +140,7 @@ class Main extends Base {
         this.maxDepth = this.settings.col * this.settings.depth;
     }
 
-    move = (e) => {
+    move(e) {
         this.mouse[0] = ((e.clientX / global.innerWidth) * 2) - 1;
         this.mouse[1] = -((e.clientY / global.innerHeight) * 2) + 1;
     }
