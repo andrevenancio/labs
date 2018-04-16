@@ -96,6 +96,29 @@ class QuadTree {
             this.se.debug(context);
         }
     }
+
+    borders(context) {
+        const {
+            x,
+            y,
+            width,
+            height,
+        } = this.boundary;
+
+        context.beginPath();
+        context.strokeStyle = '#222';
+        context.lineWidth = 1;
+        context.rect(x, y, width, height);
+        context.stroke();
+        context.closePath();
+
+        if (this.divided) {
+            this.nw.borders(context);
+            this.ne.borders(context);
+            this.sw.borders(context);
+            this.se.borders(context);
+        }
+    }
 }
 
 export default QuadTree;

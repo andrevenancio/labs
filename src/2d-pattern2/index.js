@@ -1,25 +1,11 @@
 import dat from 'dat-gui';
+import Base from '../base';
 import { Renderer, Scene, cameras, Model, chunks } from '../../lowww-core';
 import { Plane } from '../../lowww-geometries';
 
-import { getUrlParam } from '../_utils/url';
-
 const { UBO } = chunks;
 
-class Main {
-    constructor() {
-        global.addEventListener('resize', this.resize, false);
-
-        this.setup();
-        this.init();
-        this.resize();
-        this.update();
-
-        if (getUrlParam('controls') === 'false') {
-            document.body.className = 'hide';
-        }
-    }
-
+class Main extends Base {
     setup() {
         this.renderer = new Renderer();
         document.body.appendChild(this.renderer.domElement);
@@ -30,7 +16,7 @@ class Main {
         this.camera = new cameras.Orthographic();
     }
 
-    init() {
+    debug() {
         this.settings = {
             frequency: 100,
             speed: 10,
@@ -46,7 +32,9 @@ class Main {
         gui.add(this.settings, 'speed', -10, 10).onChange(() => {
             this.model.uniforms.u_speed.value = this.settings.speed;
         });
+    }
 
+    init() {
         const vertex = `#version 300 es
             in vec3 a_position;
             in vec3 a_normal;

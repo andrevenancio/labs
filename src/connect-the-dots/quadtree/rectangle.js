@@ -6,6 +6,11 @@ class Rectangle {
         this.height = height;
     }
 
+    resize(width, height) {
+        this.width = width;
+        this.height = height;
+    }
+
     constains(point) {
         return (
             point.x > this.x &&
