@@ -110,7 +110,6 @@ class Main extends Base {
 
     update() {
         this.renderer.render(this.scene, this.camera);
-        requestAnimationFrame(this.update);
     }
 }
 

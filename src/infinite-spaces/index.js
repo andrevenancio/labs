@@ -139,7 +139,7 @@ class Main extends Base {
         this.mouse[1] = -((e.clientY / global.innerHeight) * 2) + 1;
     }
 
-    updateOffsets = () => {
+    updateOffsets() {
         this.offset[0] -= this.mouse[0] * 10;
         this.offset[1] += this.mouse[1] * 10;
 
