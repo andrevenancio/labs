@@ -122,6 +122,7 @@ class Main extends Base {
         }, false);
 
         this.renderer.domElement.addEventListener('touchmove', (e) => {
+            e.preventDefault();
             this.move(e.touches[0]);
         }, false);
     }
