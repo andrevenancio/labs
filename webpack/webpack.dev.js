@@ -44,11 +44,6 @@ module.exports = {
             paths: parsing.getPaths(),
         }),
         new CopyWebpackPlugin([{
-            context: path.join(PATH_SOURCE),
-            from: '**/*.png',
-            to: path.join('img', '[folder].png'),
-        }]),
-        new CopyWebpackPlugin([{
             from: path.join(process.cwd(), PATH_SOURCE, '_static'), to: path.join(process.cwd(), PATH_DIST),
         }]),
         ...parsing.getPlugins(),
