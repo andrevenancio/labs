@@ -1,4 +1,0 @@
-Labs
-====
-
-Collection of experiments.

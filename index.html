@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title><%= htmlWebpackPlugin.options.title %></title>
+        <title>labs</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="mobile-web-app-capable" content="yes">
-        <meta property="og:title" content="<%= htmlWebpackPlugin.options.title %>" />
-        <meta property="og:url" content="https://andrevenancio.github.io/labs/<%= htmlWebpackPlugin.options.title %>.html" />
-        <meta property="og:image" content="https://andrevenancio.github.io/labs/img/thumbs/<%= htmlWebpackPlugin.options.title %>.png" />
+        <meta property="og:title" content="labs" />
+        <meta property="og:url" content="https://andrevenancio.github.io/labs/labs.html" />
+        <meta property="og:image" content="https://andrevenancio.github.io/labs/thumbs/labs.png" />
         <meta property="og:image:width" content="800" />
         <meta property="og:image:height" content="600" />
         <meta property="og:description" content="Collection of experiments" />
@@ -17,10 +17,10 @@
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:site" content="@andrevenancio" />
         <meta name="twitter:creator" content="@andrevenancio" />
-        <meta name="twitter:url" content="https://andrevenancio.github.io/labs/<%= htmlWebpackPlugin.options.title %>.html" />
+        <meta name="twitter:url" content="https://andrevenancio.github.io/labs/labs.html" />
         <meta name="twitter:title" content="Labs" />
         <meta name="twitter:description" content="Collection of experiments" />
-        <meta name="twitter:image" content="https://andrevenancio.github.io/labs/img/thumbs/<%= htmlWebpackPlugin.options.title %>.png" />
+        <meta name="twitter:image" content="https://andrevenancio.github.io/labs/thumbs/labs.png" />
         <meta name="twitter:image:width" content="800" />
         <meta name="twitter:image:height" content="600" />
         <style>
@@ -108,20 +108,36 @@
         </style>
     </head>
     <body>
-        <% if(htmlWebpackPlugin.options.paths){ %>
+        
         <nav>
-            <% Object.keys(htmlWebpackPlugin.options.paths).forEach(function(prop) { %>
-                <a href="./<%- htmlWebpackPlugin.options.paths[prop] %>" class="thumb">
-                    <span><%- prop %></span>
-                    <img src="img/<%- prop %>.png" />
+            
+                <a href="./2d-pattern1.html" class="thumb">
+                    <span>2d-pattern1</span>
+                    <img src="thumbs/2d-pattern1.png" />
                 </a>
-            <% }); %>
+            
+                <a href="./2d-pattern2.html" class="thumb">
+                    <span>2d-pattern2</span>
+                    <img src="thumbs/2d-pattern2.png" />
+                </a>
+            
+                <a href="./connect-the-dots.html" class="thumb">
+                    <span>connect-the-dots</span>
+                    <img src="thumbs/connect-the-dots.png" />
+                </a>
+            
+                <a href="./infinite-spaces.html" class="thumb">
+                    <span>infinite-spaces</span>
+                    <img src="thumbs/infinite-spaces.png" />
+                </a>
+            
+                <a href="./supershapes.html" class="thumb">
+                    <span>supershapes</span>
+                    <img src="thumbs/supershapes.png" />
+                </a>
+            
         </nav>
-        <% } else { %>
-        <a href="./" class="back">back</a>
-        <a href="https://github.com/andrevenancio/labs/blob/master/src/<%= htmlWebpackPlugin.options.title %>/index.js" class="source">source</a>
-        <script type="text/javascript" src='js/<%= htmlWebpackPlugin.options.title %>.js'></script>
-        <% } %>
+        
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-46159137-10"></script>
         <script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'UA-46159137-9');</script>
     </body>
