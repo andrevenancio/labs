@@ -7,10 +7,7 @@
   "repository": "git@github.com:andrevenancio/labs.git",
   "homepage": "https://github.com/andrevenancio/labs",
   "scripts": {
-    "start": "npm run submodule:core&npm run submodule:geometries&npm run dev",
-    "submodule:core": "webpack --config webpack/submodule.core.js --watch",
-    "submodule:geometries": "webpack --config webpack/submodule.geometries.js --watch",
-    "submodule:controls": "webpack --config webpack/submodule.controls.js --watch",
+    "start": "npm run dev",
     "dev": "webpack-dev-server --config webpack/webpack.dev.js --watch --open",
     "build": "webpack --config webpack/webpack.prod.js",
     "publish": "git subtree push --prefix build origin gh-pages",
@@ -38,6 +35,10 @@
     "gl-matrix": "git+https://github.com/andrevenancio/gl-matrix.git",
     "glob": "^7.1.2",
     "html-webpack-plugin": "^2.30.1",
+    "lowww-controls": "^1.1.3",
+    "lowww-core": "^1.1.3",
+    "lowww-geometries": "^1.1.3",
+    "lowww-postprocessing": "^1.1.3",
     "uglifyjs-webpack-plugin": "^1.1.2",
     "webpack": "^3.10.0"
   }

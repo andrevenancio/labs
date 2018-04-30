@@ -1,9 +1,0 @@
-[submodule "lowww-core"]
-	path = lowww-core
-	url = https://github.com/andrevenancio/lowww-core
-[submodule "lowww-geometries"]
-	path = lowww-geometries
-	url = https://github.com/andrevenancio/lowww-geometries
-[submodule "lowww-controls"]
-	path = lowww-controls
-	url = https://github.com/andrevenancio/lowww-controls

@@ -1,8 +1,8 @@
 import dat from 'dat-gui';
+import { Renderer, Scene, cameras, Model, chunks } from 'lowww-core';
+import { Icosahedron } from 'lowww-geometries';
+import { Orbit } from 'lowww-controls';
 import Base from '../base';
-import { Renderer, Scene, cameras, Model, chunks } from '../../lowww-core';
-import { Icosahedron } from '../../lowww-geometries';
-import { Orbit } from '../../lowww-controls';
 
 const { UBO, FOG, LIGHT } = chunks;
 

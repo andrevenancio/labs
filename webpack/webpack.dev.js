@@ -7,7 +7,6 @@ const {
     NAME,
     PATH_DIST,
     PATH_SOURCE,
-    CORE_VERSION,
 } = require('./webpack.config');
 
 module.exports = {
@@ -42,13 +41,15 @@ module.exports = {
             template: path.join(process.cwd(), PATH_SOURCE, 'template.ejs'),
             inject: false,
             title: NAME,
-            version: JSON.parse(CORE_VERSION),
             paths: parsing.getPaths(),
         }),
         new CopyWebpackPlugin([{
             context: path.join(PATH_SOURCE),
             from: '**/*.png',
             to: path.join('img', '[folder].png'),
+        }]),
+        new CopyWebpackPlugin([{
+            from: path.join(process.cwd(), PATH_SOURCE, '_static'), to: path.join(process.cwd(), PATH_DIST),
         }]),
         ...parsing.getPlugins(),
     ],

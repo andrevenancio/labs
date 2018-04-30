@@ -1,7 +1,7 @@
 import dat from 'dat-gui';
+import { Renderer, Scene, cameras, Model, chunks, shaders } from 'lowww-core';
+import { Plane } from 'lowww-geometries';
 import Base from '../base';
-import { Renderer, Scene, cameras, Model, chunks } from '../../lowww-core';
-import { Plane } from '../../lowww-geometries';
 
 const { UBO } = chunks;
 

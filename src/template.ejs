@@ -8,7 +8,7 @@
         <meta name="mobile-web-app-capable" content="yes">
         <meta property="og:title" content="<%= htmlWebpackPlugin.options.title %>" />
         <meta property="og:url" content="https://andrevenancio.github.io/labs/<%= htmlWebpackPlugin.options.title %>.html" />
-        <meta property="og:image" content="https://andrevenancio.github.io/labs/img/<%= htmlWebpackPlugin.options.title %>.png" />
+        <meta property="og:image" content="https://andrevenancio.github.io/labs/img/thumbs/<%= htmlWebpackPlugin.options.title %>.png" />
         <meta property="og:image:width" content="800" />
         <meta property="og:image:height" content="600" />
         <meta property="og:description" content="Collection of experiments" />
@@ -20,7 +20,7 @@
         <meta name="twitter:url" content="https://andrevenancio.github.io/labs/<%= htmlWebpackPlugin.options.title %>.html" />
         <meta name="twitter:title" content="Labs" />
         <meta name="twitter:description" content="Collection of experiments" />
-        <meta name="twitter:image" content="https://andrevenancio.github.io/labs/img/<%= htmlWebpackPlugin.options.title %>.png" />
+        <meta name="twitter:image" content="https://andrevenancio.github.io/labs/img/thumbs/<%= htmlWebpackPlugin.options.title %>.png" />
         <meta name="twitter:image:width" content="800" />
         <meta name="twitter:image:height" content="600" />
         <style>
@@ -113,7 +113,7 @@
             <% Object.keys(htmlWebpackPlugin.options.paths).forEach(function(prop) { %>
                 <a href="./<%- htmlWebpackPlugin.options.paths[prop] %>" class="thumb">
                     <span><%- prop %></span>
-                    <img src="https://andrevenancio.github.io/labs/img/<%- prop %>.png" />
+                    <img src="img/<%- prop %>.png" />
                 </a>
             <% }); %>
         </nav>

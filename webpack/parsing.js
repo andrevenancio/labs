@@ -52,7 +52,7 @@ const api = {
                 template: path.join(process.cwd(), PATH_SOURCE, 'template.ejs'),
                 inject: false,
                 minify: {
-                    collapseWhitespace: true,
+                    collapseWhitespace: false,
                     minifyCSS: true,
                 },
                 title: key,

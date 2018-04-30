@@ -1,8 +1,7 @@
 import { vec2 } from 'gl-matrix';
+import { Renderer, Scene, cameras, Model, chunks } from 'lowww-core';
+import { Box } from 'lowww-geometries';
 import Base from '../base';
-import { Renderer, Scene, cameras, Model, chunks } from '../../lowww-core';
-import { Box } from '../../lowww-geometries';
-
 import { mod } from '../_lib/utils/math';
 
 const {
@@ -10,7 +9,6 @@ const {
     NOISE,
     FOG,
 } = chunks;
-
 
 class Main extends Base {
     setup() {

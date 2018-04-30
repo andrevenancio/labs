@@ -1,7 +1,7 @@
 import { gui } from 'dat-gui';
-import { Renderer, Scene, cameras, Model, chunks } from '../../lowww-core';
-import { Icosahedron, Dodecahedron } from '../../lowww-geometries';
-import { Orbit } from '../../lowww-controls';
+import { Renderer, Scene, cameras, Model, chunks } from 'lowww-core';
+import { Icosahedron, Dodecahedron } from 'lowww-geometries';
+import { Orbit } from 'lowww-controls';
 
 const {
     UBO,
