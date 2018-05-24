@@ -8,7 +8,6 @@ const { UBO } = chunks;
 class Main extends Base {
     setup() {
         this.renderer = new Renderer();
-        this.renderer.setSize(this.width, this.height);
         document.body.appendChild(this.renderer.domElement);
 
         this.scene = new Scene();
@@ -19,24 +18,19 @@ class Main extends Base {
 
     debug() {
         this.settings = {
-            frequency: 10,
-            speed: 2,
-            offset: 5,
+            width: 30,
+            height: 30,
         };
 
         const gui = new dat.GUI();
         gui.close();
 
-        gui.add(this.settings, 'frequency', 0, 100).onChange(() => {
-            this.model.uniforms.u_frequency.value = this.settings.frequency;
+        gui.add(this.settings, 'width', 1, 50).step(1).onChange(() => {
+            this.model.uniforms.u_width.value = this.settings.width;
         });
 
-        gui.add(this.settings, 'speed', 0, 10).onChange(() => {
-            this.model.uniforms.u_speed.value = this.settings.speed;
-        });
-
-        gui.add(this.settings, 'offset', 0, 10).onChange(() => {
-            this.model.uniforms.u_offset.value = this.settings.offset;
+        gui.add(this.settings, 'height', 1, 50).step(1).onChange(() => {
+            this.model.uniforms.u_height.value = this.settings.height;
         });
     }
 
@@ -61,39 +55,59 @@ class Main extends Base {
             precision highp float;
             precision highp int;
 
+            #define thickness 0.01
+
             in vec2 v_uv;
 
             ${UBO.scene()}
             ${UBO.model()}
 
+            uniform float u_width;
+            uniform float u_height;
+            uniform vec2 u_size;
             uniform float u_ratio;
-            uniform float u_frequency;
-            uniform float u_speed;
-            uniform float u_offset;
 
             out vec4 outColor;
 
-            float circle(vec2 uv, vec2 offset) {
-                float d = length(uv - offset);
-                float c = cos(d * u_frequency - iGlobalTime * u_speed);
-                c *= 200.0;
+            float drawLine(vec2 p, vec2 a,vec2 b) {
+                p -= a, b -= a;
+                float h = clamp(dot(p, b) / dot(b, b), 0.0, 1.0);
+                return length(p - b * h);
+            }
 
-                return c;
+            float rand(vec2 co){
+                return fract(sin(dot(co.xy, vec2(12.9898, 78.233))) * 43758.5453);
             }
 
             void main() {
-                vec2 uv = v_uv * 2.0 - 1.0;
+                vec2 uv = v_uv;
                 uv.x *= u_ratio;
 
-                float i0 = circle(uv, vec2(0.0));
-                float i1 = circle(uv, vec2(u_offset, 0.0));
-                float i2 = circle(uv, vec2(0.0, u_offset));
-                float i3 = circle(uv, vec2(-u_offset, 0.0));
-                float i4 = circle(uv, vec2(0.0, -u_offset));
+                float color = 0.0;
 
-                float c = i0 + i1 + i2 + i3 + i4;
+                // divide the screen in square steps
+                float stepW = 1.0 / u_width;
+                float stepH = 1.0 / u_height;
 
-                outColor = vec4(vec3(c), 1.0);
+                int x = int(uv.x * u_width);
+                int y = int(uv.y * u_height);
+
+                vec2 p = vec2(float(x) * stepW, float(y) * stepH);
+
+                // draw lines
+                vec2 a = p;
+                vec2 b = vec2(p.x + stepW, p.y + stepH);
+
+                if (rand(p) > 0.5) {
+                    a.x = p.x + stepW;
+                    b.x = p.x;
+                }
+
+                float distance = drawLine(uv, a, b);
+                float line = smoothstep(thickness / 4.0, thickness / 4.0 - (0.012), distance);
+                color += line;
+
+                outColor = vec4(color);
             }
         `;
 
@@ -104,20 +118,21 @@ class Main extends Base {
         this.model.setIndex(new Uint16Array(geometry.indices));
         this.model.setAttribute('a_uv', 'vec2', new Float32Array(geometry.uvs));
         this.model.setUniform('u_ratio', 'float', global.innerWidth / global.innerHeight);
-        this.model.setUniform('u_frequency', 'float', this.settings.frequency);
-        this.model.setUniform('u_speed', 'float', this.settings.speed);
-        this.model.setUniform('u_offset', 'float', this.settings.offset);
+        this.model.setUniform('u_size', 'vec2', [global.innerWidth, global.innerHeight]);
+        this.model.setUniform('u_width', 'float', this.settings.width);
+        this.model.setUniform('u_height', 'float', this.settings.height);
         this.model.setShader(vertex, fragment);
         this.scene.add(this.model);
     }
 
     resize() {
+        this.model.uniforms.u_size.value = [global.innerWidth, global.innerHeight];
         this.model.uniforms.u_ratio.value = global.innerWidth / global.innerHeight;
         this.renderer.setSize(global.innerWidth, global.innerHeight);
         this.renderer.setRatio(global.devicePixelRatio);
     }
 
-    update(startTime) {
+    update() {
         this.renderer.render(this.scene, this.camera);
     }
 }
