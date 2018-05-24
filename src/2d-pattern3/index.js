@@ -64,7 +64,6 @@ class Main extends Base {
 
             uniform float u_width;
             uniform float u_height;
-            uniform vec2 u_size;
             uniform float u_ratio;
 
             out vec4 outColor;
@@ -118,7 +117,6 @@ class Main extends Base {
         this.model.setIndex(new Uint16Array(geometry.indices));
         this.model.setAttribute('a_uv', 'vec2', new Float32Array(geometry.uvs));
         this.model.setUniform('u_ratio', 'float', global.innerWidth / global.innerHeight);
-        this.model.setUniform('u_size', 'vec2', [global.innerWidth, global.innerHeight]);
         this.model.setUniform('u_width', 'float', this.settings.width);
         this.model.setUniform('u_height', 'float', this.settings.height);
         this.model.setShader(vertex, fragment);
@@ -126,7 +124,6 @@ class Main extends Base {
     }
 
     resize() {
-        this.model.uniforms.u_size.value = [global.innerWidth, global.innerHeight];
         this.model.uniforms.u_ratio.value = global.innerWidth / global.innerHeight;
         this.renderer.setSize(global.innerWidth, global.innerHeight);
         this.renderer.setRatio(global.devicePixelRatio);
