@@ -34,7 +34,7 @@
     "dat-gui": "^0.5.0",
     "gl-matrix": "git+https://github.com/andrevenancio/gl-matrix.git",
     "glob": "^7.1.2",
-    "html-webpack-plugin": "^2.30.1",
+    "html-webpack-plugin": "^3.2.0",
     "lowww-controls": "^1.1.3",
     "lowww-core": "^1.1.3",
     "lowww-geometries": "^1.1.3",
