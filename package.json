@@ -40,6 +40,6 @@
     "lowww-geometries": "^1.1.3",
     "lowww-postprocessing": "^1.1.3",
     "uglifyjs-webpack-plugin": "^1.1.2",
-    "webpack": "^3.10.0"
+    "webpack": "^4.41.1"
   }
 }
